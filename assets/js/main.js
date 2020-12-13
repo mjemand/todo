@@ -1,13 +1,16 @@
 (function() {
-    // Mock data.
-    let todos = [];
     
-    // Parts of date.
+    let todos = [];
+    let nrOfPendingTodos = 0;
+    
     const bodyDay = document.querySelector('.body__day');
     const bodyDate = document.querySelector('.body__date');
     const todoAddBtn = document.querySelector('.todo__btn');
     const todoInput = document.querySelector('.todo__input');
+    const todoNumber = document.querySelector('.todo__number');
     const todoListPending = document.querySelector('.todo__list--pending');
+    const todoDeleteBtn = document.querySelector('fa fa-trash');
+    
     
     const dayNames = [
         'Sunday', 
@@ -46,6 +49,7 @@
         showDate();
         setListeners();
         loadExistingTodos();
+
     };
 
     // Load existing todos.
@@ -58,6 +62,8 @@
         if (todos && Array.isArray(todos)) {
             todos.forEach( todo => showTodo(todo) );
         }
+    
+        nrOfPendingTodos = todos.length;
     };
 
     // Show date.
@@ -76,6 +82,7 @@
     // Set event listeners.
     const setListeners = () => {
         todoAddBtn.addEventListener('click', addNewTodo);
+        todoDeleteBtn.addEventListener('click', deleteTodo);
     };
 
     // Save and add todo to the database.
@@ -98,6 +105,10 @@
         showTodo(todo);
 
         todoInput.value = '';
+
+        nrOfPendingTodos +=1;
+        todoNumber.textContent = nrOfPendingTodos;
+
     };
 
     // Show todo in the list.
@@ -112,7 +123,10 @@
                 <i class="fa fa-trash"></i>
             </button>        
         `;
+
     };
+
+    const deleteTodo = () => {
 
     init();
 })();

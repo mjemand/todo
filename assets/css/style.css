@@ -10,13 +10,11 @@ body {
     flex-wrap: wrap;
     width: 100vw;
     height: 100vh;
-    background: rgb(140,140,140);
 }
 
 .container {
     padding: .8rem;
     font-size: .8rem;
-    color: rgba(71, 86, 92, 1)
 }
 
 .main-container {
@@ -24,56 +22,45 @@ body {
     width: 50vw;
     min-height: 50vh;
     margin: auto;
-    background-color: hsl(0, 0%, 100%);
-    border: 1px solid rgba(89, 89, 93, .3) ;
-    border-radius: .6rem;
-    box-shadow: 0 0 5rem rgba(59, 59, 63, .3);
+    border: 1px solid grey;
 }
 
 .header {
     padding: .5rem;
     text-align: center;
-    color: rgb(255, 255, 255);
-    border-radius: .6rem;
-    background-color: rgba(71, 86, 92, .5);
     font-size: 1.2rem;
     margin-bottom: .5rem;
 }
 
+.body__day {
+    padding: .5rem
+}
+
+.body__date {
+    padding: .5rem;
+    margin-bottom: 1rem;
+}
+
 .todo-input {
-    border: 1px solid rgba(71, 86, 92, 1);
+    border: 1px solid grey;
     padding: .3rem 1rem;
     width: 80%;
-    border-radius: .6rem;
 }
 
 .add-todo {
-    border: 1px solid rgb(148, 148, 148);
-    background-color: rgb(148, 148, 148);
+    border: 1px solid grey;
+    background-color: lightgrey;
     padding: .3rem 0;
     width: 15%;
-    border-radius: .6rem;
     text-align: center;
     float: right;
     cursor: pointer;
     font-size: 1.1rem;
     line-height: 1.1rem;
-    font-weight: 900;
-    color: rgba(244, 247, 252, 1);
-}
-
-.add-todo:hover {
-    border: 1px solid rgb(59, 97, 202);
-    background-color: rgb(59, 97, 202);
-    color: rgba(244, 247, 252, 1);
 }
 
 .todo-counter {
     padding: 1.5rem 0 0 0;
-}
-
-.counter {
-    font-weight: 800;
 }
 
 .todo-container {
@@ -82,19 +69,12 @@ body {
 }
 
 .todo-container .todo-item {
-    background-color: rgba(89, 89, 93, .2) ;
+    background-color: lightgrey;
     margin-bottom: .4rem;
     padding: .5rem .3rem .5rem 1rem;
     font-size: .8rem;
-    color: rgba(71, 86, 92, 1);
-    border-radius: .5rem;
-    border: 1px solid rgba(89, 89, 93, .1) ;
+    border: 1px solid grey;
     display: block;
-}
-
-.todo-container .todo-item:hover {
-    background-color: rgba(109, 97, 45, 0.03);
-    border: 1px solid rgba(89, 89, 93, .4);
 }
 
 .hide {
@@ -102,14 +82,12 @@ body {
 }
 
 .completed-container .todo-item {
-    background-color: rgb(255, 255, 255);
     margin-bottom: .4rem;
     padding: .5rem .3rem .5rem 1rem;
     font-size: .8rem;
-    color: rgb(115, 132, 139);
+    color: lightgrey;
     text-decoration: line-through;
-    border: 1px solid rgba(89, 89, 93, .1) ;
-    border-radius: .5rem;
+    border: 1px solid lightgrey;
 }
 
 .todo-item .delete-button {
@@ -118,15 +96,13 @@ body {
 
 .todo-container .todo-item:hover .delete-button {
     display: inline-block;
-    background-color: rgb(219, 77, 77);
-    color: rgba(244, 247, 252, 1);
+    background-color: red;
+    color: white;
     padding: .45rem 1rem;
     text-align: center;
     float: right;
     cursor: pointer;
     margin: -.5rem -.3rem 0 0;
-    border-top-right-radius: .5rem;
-    border-bottom-right-radius: .5rem;
 }
 
 .todo-container .todo-item:hover .delete-button i {
@@ -150,10 +126,4 @@ body {
     padding: .5rem 1rem;
     cursor: pointer;
     border: none;
-    border-radius: .5rem;
-}
-
-.controller:hover {
-    color: rgba(244, 247, 252, 1);
-    background-color: rgb(59, 97, 202);
 }

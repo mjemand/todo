@@ -1,60 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">    
 </head>
-
 <body>
-    <div class="container">
-        <!-- Header. -->
-        <h2 class="body__header">Daily To-Do list manager</h2>
-        <!-- Header. Name of this day. -->
-        <h3 class="body__day">Tuesday</h3>
 
-        <!-- Date. -->
-        <h3 class="body__date">2020-12-10</h3>
+    <div class="main-container">
 
-        <!-- Insert new todo element. -->
-        <div class="body__todo-insert">
-            <input class="todo__input" type="text" placeholder="Take the garbage out">
-            <button class="todo__btn">
-                <i class="fa fa-plus"></i>
-            </button>
+        <div class="container header-container">
+            <div class="header">Daily To-Do list manager</div>
+            <h3 class="body__day">Tuesday</h3>
+            <h3 class="body__date">2020-12-10</h3>
+            <input type="text" name="todo-input" id="todo-input" class="todo-input" placeholder="Take the garbage out">
+            <button class="add-todo">+</button>
+            <div class="todo-counter">You have <span class="counter">0</span> pending items</div>
         </div>
 
-        <!-- Diplay todos. -->
-        <p>You have
-            <span class="todo__number">0</span>
-            pending items
-        </p>
+        <div class="container todo-container"></div>
 
-        <!-- Todo list. -->
-        <div class="todo__list--pending">
+        <div class="container completed-container hide"></div>
 
+        <div class="container controller-container">
+            <button class="controller show-hide">Show Complete</button>
+            <button class="controller clear-all">Clear All</button>
         </div>
 
-        <div class="todo__list--done">
-
-        </div>
-
-        <!-- Footer menu. -->
-        <div class="todo__footer">
-            <button class="footer__btn--complete">
-                Show Complete
-            </button>
-            <button class="footer__btn--clear">
-                Clear All
-            </button>
-        </div>
     </div>
+    
 
-    <script src="assets/js/main.js"></script>
-
+    <script src="./assets/js/main.js"></script>
 </body>
-
 </html>

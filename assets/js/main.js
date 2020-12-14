@@ -1,132 +1,139 @@
-(function() {
-    
-    let todos = [];
-    let nrOfPendingTodos = 0;
-    
-    const bodyDay = document.querySelector('.body__day');
-    const bodyDate = document.querySelector('.body__date');
-    const todoAddBtn = document.querySelector('.todo__btn');
-    const todoInput = document.querySelector('.todo__input');
-    const todoNumber = document.querySelector('.todo__number');
-    const todoListPending = document.querySelector('.todo__list--pending');
-    const todoDeleteBtn = document.querySelector('fa fa-trash');
-    
-    
-    const dayNames = [
-        'Sunday', 
-        'Monday', 
-        'Tuesday', 
-        'Wednessday', 
-        'Thursday', 
-        'Friday', 
-        'Saturday',
-    ];
+'use strict';
 
-    // Localstorage handler object.
-    const localDB = {
-        // localDB.setItem('todos', todos);
-        setItem(key, value) {
-            value = JSON.stringify(value);
-            localStorage.setItem(key, value);
-        },
-        // localDB.getItem('todos')
-        getItem(key) {
-            const value = localStorage.getItem(key);
-            if (!value) {
-                return null;
-            }
+const bodyDay = document.querySelector('.body__day');
+const bodyDate = document.querySelector('.body__date');
+const todoInput = document.querySelector('.todo-input');
+const addTodoButton = document.querySelector('.add-todo');
+const todoContainer = document.querySelector('.todo-container');
+const completedContainer = document.querySelector('.completed-container');
+const todoCounterHolder = document.querySelector('.counter');
+const showHideButton = document.querySelector('.show-hide');
+const clearAllButton = document.querySelector('.clear-all');
+const dayNames = [
+    'Sunday', 
+    'Monday', 
+    'Tuesday', 
+    'Wednessday', 
+    'Thursday', 
+    'Friday', 
+    'Saturday',
+];
+let todoCounter = 0;
+let storageId = 1;
 
-            return JSON.parse(value);
-        },
-        // localDB.removeItem('todos');
-        removeItem(key) {
-            localStorage.removeItem(key);
-        }
-    };
+const showDate = () => {
+    const currentDate = new Date();
+    const day = [
+        currentDate.getMonth() + 1, 
+        currentDate.getDate(),
+        currentDate.getFullYear(), 
+    ].map( num => num < 10 ? `0${num}` : num );
 
-    // Initialize application.
-    const init = () => {
-        showDate();
-        setListeners();
-        loadExistingTodos();
+    bodyDay.textContent = dayNames[currentDate.getDay()];
+    bodyDate.textContent = day.join('-');
+};
+showDate();
 
-    };
+const storageHandler = {
+    set: (key, value) => localStorage.setItem(key, value),
+    get: key => localStorage.getItem(key),
+    reset: key => localStorage.removeItem(key),
+};
 
-    // Load existing todos.
-    const loadExistingTodos = () => {
-        const savedTodos = localDB.getItem('todos');
-        if (savedTodos) {
-            todos = savedTodos;
-        }
-        
-        if (todos && Array.isArray(todos)) {
-            todos.forEach( todo => showTodo(todo) );
-        }
-    
-        nrOfPendingTodos = todos.length;
-    };
+const counterReset = () => {
+    todoCounter = 0; 
+    todoCounterHolder.textContent = todoCounter;
+}
 
-    // Show date.
-    const showDate = () => {
-        const currentDate = new Date();
-        const day = [
-            currentDate.getMonth() + 1, 
-            currentDate.getDate(),
-            currentDate.getFullYear(), 
-        ].map( num => num < 10 ? `0${num}` : num );
+const counterUpdater = (direction) => {
+    if (direction) todoCounter += 1;
+    else todoCounter -= 1; 
+    todoCounterHolder.textContent = todoCounter;
+}
 
-        bodyDay.textContent = dayNames[currentDate.getDay()];
-        bodyDate.textContent = day.join('-');
-    };
+const deleteTodo = (id) => {
+    document.querySelector(`[data-id="${id}"]`).parentElement.remove();
+    storageHandler.reset(id);
+    counterUpdater(false);
+}
 
-    // Set event listeners.
-    const setListeners = () => {
-        todoAddBtn.addEventListener('click', addNewTodo);
-        todoDeleteBtn.addEventListener('click', deleteTodo);
-    };
+const todoCompleted = (id) => {
+    let valueString = storageHandler.get(id);
+    valueString = valueString.replace('"state":1', '"state":2');
+    storageHandler.set(id, valueString);
+    const targetCheckbox = document.querySelector(`[data-setid="${id}"]`);
+    const targetTodo = targetCheckbox.parentElement;
+    targetCheckbox.disabled = true;
+    targetTodo.remove();
+    completedContainer.insertBefore(targetTodo, completedContainer.firstChild);
+    counterUpdater(false);
+}
 
-    // Save and add todo to the database.
-    const addNewTodo = () => {
-        const value = todoInput.value;
-        if (value === '') {
-            alert('Please type a todo.');
-            return;
-        }
+const addDeleteEventListener = (id) => document.querySelector(`[data-id="${id}"]`).addEventListener('click', () => deleteTodo(id));
+const addSetEventListener = (id) => document.querySelector(`[data-setid="${id}"]`).addEventListener('click', () => todoCompleted(id));
 
-        const todo = {
-            text: value,
-            done: false
-        };
+const createTodo = (text, id, state) => {
+    let isChecked = '';
+    let parentContainer = todoContainer;
+    const todoItem = document.createElement('div');
+    todoItem.classList.add('todo-item');
+    if (parseInt(state) === 2) {
+        parentContainer = completedContainer;
+        isChecked = 'checked disabled';
+    } else counterUpdater(true);
+    todoItem.innerHTML = `  <input type="checkbox" ${isChecked} name="set-completed" class="set-completed" data-setid="${id}">
+                            ${text}
+                            <button class="delete-button" data-id="${id}"><i class="fa fa-trash"></i></button>`;
+    parentContainer.insertBefore(todoItem, parentContainer.firstChild);
+}
 
-        todos.push(todo);
-
-        localDB.setItem('todos', todos);
-
-        showTodo(todo);
-
+const addTodo = () => {
+    if (todoInput.value) {
+        createTodo(todoInput.value, storageId, 1);
+        storageHandler.set(storageId.toString(), JSON.stringify({todo: todoInput.value, state: 1, }));
+        addDeleteEventListener(storageId);
+        addSetEventListener(storageId);
         todoInput.value = '';
+        storageId += 1;
+    }
+}
 
-        nrOfPendingTodos +=1;
-        todoNumber.textContent = nrOfPendingTodos;
+const buildTodoList = () => {
+    Object.keys(localStorage).forEach((key) => {
+        const obj = JSON.parse(storageHandler.get(key));
+        createTodo(obj.todo, key, obj.state);
+        addDeleteEventListener(key);
+        addSetEventListener(key);
+        if(parseInt(key) >= storageId) storageId = parseInt(key) + 1;
+    });
+}
+buildTodoList();
 
-    };
+const setShowHide = () => {
+    const btnContent = showHideButton.textContent;
+    if (btnContent == 'Show Complete') {
+        completedContainer.classList.remove('hide');
+        showHideButton.textContent = 'Hide Complete'
+    } else {
+        completedContainer.classList.add('hide');
+        showHideButton.textContent = 'Show Complete'
+    }
+}
 
-    // Show todo in the list.
-    const showTodo = todo => {
-        const todoItem = document.createElement('div');
-        todoListPending.appendChild(todoItem);
+const clearAll = () => {
+    Object.keys(localStorage).forEach((key) => {
+        const obj = JSON.parse(storageHandler.get(key));
+        if (parseInt(obj.state) === 1) {
+            storageHandler.reset(key);
+            document.querySelector(`[data-setid="${key}"]`).parentElement.remove();
+            counterReset();
+        }
+    });
+}
 
-        todoItem.innerHTML = `
-            <input type="checkbox">
-            <span>${todo.text}</span>
-            <button>
-                <i class="fa fa-trash"></i>
-            </button>        
-        `;
-
-    };
-
-    const deleteTodo = () => {
-
-    init();
-})();
+const addTodoClickListener = () => addTodoButton.addEventListener('click', addTodo);
+const addShowHideClickListener = () => showHideButton.addEventListener('click', setShowHide);
+const clearAllClickListener = () => clearAllButton.addEventListener('click', clearAll);
+addTodoClickListener();
+addShowHideClickListener();
+clearAllClickListener();
